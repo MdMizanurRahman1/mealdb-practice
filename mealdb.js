@@ -13,7 +13,7 @@ const displayMeals = meals => {
     mealContainer.innerText = '';
 
     meals.forEach(meal => {
-        //console.log(meal);
+        console.log(meal);
 
         //2. create child for each element
         const mealDiv = document.createElement('div');
@@ -27,6 +27,10 @@ const displayMeals = meals => {
                     <p class="card-text">This is a longer card with supporting text below as a natural lead-in
                                 to additional content. This content is a little bit longer.</p>
                     <p class="card-text">${meal.strYoutube}</p>
+                    <!-- Button trigger modal -->
+                    <button onclick="idMealDetail(${meal.idMeal})" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mealDetails">
+                     Details
+                    </button>
                 </div>
         </div>
         
@@ -46,6 +50,29 @@ const searchMeal = () => {
 
     loadMeals(searchText);
 }
+
+
+//modal area
+
+const idMealDetail = idMeal => {
+    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`
+    fetch(url)
+        .then(res => res.json())
+        .then(data => loadMealDetails(data.meals[0]))
+}
+
+const loadMealDetails = loadMeal => {
+    document.getElementById('mealDetailsLabel').innerText = loadMeal.strMeal;
+
+    const mealDetailDiv = document.getElementById('mealDetailDiv');
+    mealDetailDiv.innerHTML = `
+    <p class="card-text">Youtube: ${loadMeal.strYoutube}</p>
+    <p class="card-text">Source: ${loadMeal.strSource}</p>
+    <p class="card-text">Area: ${loadMeal.strArea}</p>
+    <p class="card-text">Category: ${loadMeal.strCategory}</p>
+    `
+}
+
 
 
 loadMeals('fish');
